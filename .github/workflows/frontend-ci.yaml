@@ -16,7 +16,7 @@ jobs:
                 working-directory: starter/frontend
         
         steps:
-        - name: check-out repo
+        - name: checkout repo
           uses: actions/checkout@v3
         
         - name: setup nodejs
