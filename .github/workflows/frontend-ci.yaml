@@ -58,17 +58,13 @@ jobs:
         defaults:
             run:
                 working-directory: starter/frontend
+        needs:
+            - lint-job
+            - test-job
         
         steps:
         - name: check-out repo
           uses: actions/checkout@v3
-        
-        - name: setup nodejs
-          uses: actions/setup-node@v3
-          with: 
-            node-version: ${{env.NODE_VERSION}}
-            cache: 'npm'
-            cache-dependency-path: "starter/frontend/package-lock.json"
         
         - name: Build
           run: | 
