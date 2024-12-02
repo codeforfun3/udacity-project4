@@ -26,6 +26,7 @@ jobs:
 
       - name: Install, Run
         run: |
+          pip install pipenv
           pipenv install
           pipenv run lint
 
@@ -46,6 +47,7 @@ jobs:
 
       - name: Install, Run
         run: |
+          pip install pipenv
           pipenv install
           pipenv run test
     
