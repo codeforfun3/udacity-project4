@@ -79,7 +79,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build and push image
+      - name: Build and push docker image
         working-directory: starter/backend
         run: |
           docker build -t backend:${GITHUB_SHA} .
