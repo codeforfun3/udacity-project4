@@ -91,12 +91,12 @@ jobs:
           aws eks update-kubeconfig --name cluster --region us-east-1
 
       - name: Deploy image into cluster
-        working-directory: starter/backend/k8s
         run: |
+          cd starter/backend/k8s
           kustomize edit set image backend=628647790621.dkr.ecr.us-east-1.amazonaws.com/backend:${GITHUB_SHA}
           kustomize build | kubectl apply -f -
 
       - name: Print application URLs
-        working-directory: starter/backend/k8s
         run: |
+          cd starter/backend/k8s
           kubectl get svc -A
