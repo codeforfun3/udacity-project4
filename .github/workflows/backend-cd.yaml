@@ -68,19 +68,19 @@ jobs:
       - name: check-out repo
         uses: actions/checkout@v3
 
-      - name: AWS Credentials
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_ACCESS_SECRET }}
           aws-region: us-east-1
   
-      - name: AWS ECR
-        id: login-ecr
+      - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build
+      - name: Build and push image
         run: |
+          docker build -t backend:
           docker build -t backend:${GITHUB_SHA} .
           docker tag backend:${GITHUB_SHA} 628647790621.dkr.ecr.us-east-1.amazonaws.com/backend:${GITHUB_SHA}
           docker push 628647790621.dkr.ecr.us-east-1.amazonaws.com/backend:${GITHUB_SHA}
@@ -88,11 +88,9 @@ jobs:
       - name: Deploy image into cluster
         run: |
           aws eks update-kubeconfig --name cluster --region us-east-1
-          cd starter/backend/k8s
           kustomize edit set image backend=628647790621.dkr.ecr.us-east-1.amazonaws.com/backend:${GITHUB_SHA}
           kustomize build | kubectl apply -f -
 
       - name: Print application URLs        
         run: |
-          cd starter/backend/k8s
           kubectl get svc -A
