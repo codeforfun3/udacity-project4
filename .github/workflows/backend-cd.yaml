@@ -81,15 +81,15 @@ jobs:
 
       - name: Build
         run: |
-          docker build -t backend:${GITHUB_RUN_NUMBER} .
-          docker tag backend:${GITHUB_RUN_NUMBER} 628647790621.dkr.ecr.us-east-1.amazonaws.com/backend:${GITHUB_RUN_NUMBER}
-          docker push 628647790621.dkr.ecr.us-east-1.amazonaws.com/backend:${GITHUB_RUN_NUMBER}
+          docker build -t backend:${GITHUB_SHA} .
+          docker tag backend:${GITHUB_SHA} 628647790621.dkr.ecr.us-east-1.amazonaws.com/backend:${GITHUB_SHA}
+          docker push 628647790621.dkr.ecr.us-east-1.amazonaws.com/backend:${GITHUB_SHA}
 
       - name: Deploy image into cluster
         run: |
           aws eks update-kubeconfig --name cluster --region us-east-1
           cd starter/backend/k8s
-          kustomize edit set image backend=628647790621.dkr.ecr.us-east-1.amazonaws.com/backend:${GITHUB_RUN_NUMBER}
+          kustomize edit set image backend=628647790621.dkr.ecr.us-east-1.amazonaws.com/backend:${GITHUB_SHA}
           kustomize build | kubectl apply -f -
 
       - name: Print application URLs        
